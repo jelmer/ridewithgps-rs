@@ -151,16 +151,38 @@ println!("User: {:?}", user);
 
 Currently implemented endpoints:
 
+### Authentication & Users
 - `POST /api/v1/auth_tokens` - Create authentication token
 - `GET /api/v1/users/current` - Get current user
+
+### Routes
 - `GET /api/v1/routes.json` - List routes
 - `GET /api/v1/routes/{id}.json` - Get route
 - `GET /api/v1/routes/{id}/polyline.json` - Get route polyline
 - `DELETE /api/v1/routes/{id}.json` - Delete route
+
+### Trips
 - `GET /api/v1/trips.json` - List trips
 - `GET /api/v1/trips/{id}.json` - Get trip
 - `GET /api/v1/trips/{id}/polyline.json` - Get trip polyline
 - `DELETE /api/v1/trips/{id}.json` - Delete trip
+
+### Events
+- `GET /api/v1/events.json` - List events
+- `POST /api/v1/events.json` - Create event
+- `GET /api/v1/events/{id}.json` - Get event
+- `PUT /api/v1/events/{id}.json` - Update event
+- `DELETE /api/v1/events/{id}.json` - Delete event
+
+### Collections
+- `GET /api/v1/collections.json` - List collections
+- `GET /api/v1/collections/{id}.json` - Get collection
+- `GET /api/v1/collections/pinned.json` - Get pinned collection
+
+### Sync
+- `GET /api/v1/sync.json` - Get changed items since datetime
+
+**Not implemented:** Points of Interest (organization-only), Club Members (organization-only)
 
 ## License
 

@@ -28,12 +28,18 @@ use std::fmt;
 use url::Url;
 
 mod auth;
+mod collections;
+mod events;
 mod routes;
+mod sync;
 mod trips;
 mod users;
 
 pub use auth::*;
+pub use collections::*;
+pub use events::*;
 pub use routes::*;
+pub use sync::*;
 pub use trips::*;
 pub use users::*;
 
@@ -244,6 +250,17 @@ impl RideWithGpsClient {
 
         let headers = self.build_headers()?;
         let response = self.client.post(url).headers(headers).json(body).send()?;
+
+        self.handle_response(response)
+    }
+
+    /// Execute a PUT request
+    fn put<T: for<'de> Deserialize<'de>, B: Serialize>(&self, path: &str, body: &B) -> Result<T> {
+        let url = self.base_url.join(path)?;
+        trace!("PUT {}", url);
+
+        let headers = self.build_headers()?;
+        let response = self.client.put(url).headers(headers).json(body).send()?;
 
         self.handle_response(response)
     }
