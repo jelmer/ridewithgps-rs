@@ -1,9 +1,9 @@
 //! Collection-related types and methods
 
-use crate::{PaginatedResponse, Result, RideWithGpsClient};
+use crate::{PaginatedResponse, Result, RideWithGpsClient, Route, Trip};
 use serde::{Deserialize, Serialize};
 
-/// A collection of routes
+/// A collection of routes and trips
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Collection {
     /// Collection ID
@@ -29,6 +29,12 @@ pub struct Collection {
 
     /// Collection cover photo URL
     pub cover_photo_url: Option<String>,
+
+    /// Routes in the collection (included when fetching a specific collection)
+    pub routes: Option<Vec<Route>>,
+
+    /// Trips in the collection (included when fetching a specific collection)
+    pub trips: Option<Vec<Trip>>,
 }
 
 /// Parameters for listing collections
@@ -92,6 +98,8 @@ impl RideWithGpsClient {
 
     /// Get a specific collection by ID
     ///
+    /// This returns the full collection including its routes and trips.
+    ///
     /// # Arguments
     ///
     /// * `id` - The collection ID
@@ -109,6 +117,20 @@ impl RideWithGpsClient {
     ///
     /// let collection = client.get_collection(12345).unwrap();
     /// println!("Collection: {:?}", collection);
+    ///
+    /// // Access routes within the collection
+    /// if let Some(routes) = &collection.routes {
+    ///     for route in routes {
+    ///         println!("Route: {} - {:?}", route.id, route.name);
+    ///     }
+    /// }
+    ///
+    /// // Access trips within the collection
+    /// if let Some(trips) = &collection.trips {
+    ///     for trip in trips {
+    ///         println!("Trip: {} - {:?}", trip.id, trip.name);
+    ///     }
+    /// }
     /// ```
     pub fn get_collection(&self, id: u64) -> Result<Collection> {
         self.get(&format!("/api/v1/collections/{}.json", id))
