@@ -182,7 +182,21 @@ Currently implemented endpoints:
 ### Sync
 - `GET /api/v1/sync.json` - Get changed items since datetime
 
-**Not implemented:** Points of Interest (organization-only), Club Members (organization-only)
+### Points of Interest (organization-only)
+- `GET /api/v1/points_of_interest.json` - List POIs
+- `POST /api/v1/points_of_interest.json` - Create POI
+- `GET /api/v1/points_of_interest/{id}.json` - Get POI
+- `PUT /api/v1/points_of_interest/{id}.json` - Update POI
+- `DELETE /api/v1/points_of_interest/{id}.json` - Delete POI
+- `POST /api/v1/points_of_interest/{id}/routes/{route_id}.json` - Associate POI with route
+- `DELETE /api/v1/points_of_interest/{id}/routes/{route_id}.json` - Disassociate POI from route
+
+### Club Members (organization-only)
+- `GET /api/v1/members.json` - List members
+- `GET /api/v1/members/{id}.json` - Get member
+- `PUT /api/v1/members/{id}.json` - Update member permissions/status
+
+**All RideWithGPS API v1 endpoints are now implemented!**
 
 ## License
 
