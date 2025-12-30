@@ -17,6 +17,27 @@ pub struct Member {
     /// Organization ID
     pub organization_id: Option<u64>,
 
+    /// API URL
+    pub url: Option<String>,
+
+    /// Whether the member is active
+    pub active: Option<bool>,
+
+    /// Whether the member is an admin
+    pub admin: Option<bool>,
+
+    /// Whether the member can manage routes
+    pub manages_routes: Option<bool>,
+
+    /// Whether the member can manage members
+    pub manages_members: Option<bool>,
+
+    /// Whether the member can manage billing
+    pub manages_billing: Option<bool>,
+
+    /// When the member was approved
+    pub approved_at: Option<String>,
+
     /// Member role
     pub role: Option<String>,
 
@@ -40,6 +61,9 @@ pub struct Member {
 
     /// Permissions
     pub permissions: Option<MemberPermissions>,
+
+    /// User object
+    pub user: Option<crate::User>,
 }
 
 /// Member permissions

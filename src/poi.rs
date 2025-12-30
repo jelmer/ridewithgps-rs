@@ -18,13 +18,22 @@ pub struct PointOfInterest {
     pub description: Option<String>,
 
     /// Latitude
-    pub latitude: Option<f64>,
+    #[serde(alias = "latitude")]
+    pub lat: Option<f64>,
 
     /// Longitude
-    pub longitude: Option<f64>,
+    #[serde(alias = "longitude")]
+    pub lng: Option<f64>,
 
     /// POI type/category
-    pub poi_type: Option<String>,
+    #[serde(alias = "poi_type")]
+    pub r#type: Option<String>,
+
+    /// Type ID
+    pub type_id: Option<u64>,
+
+    /// Type name
+    pub type_name: Option<String>,
 
     /// Icon identifier
     pub icon: Option<String>,
@@ -34,6 +43,9 @@ pub struct PointOfInterest {
 
     /// Organization ID
     pub organization_id: Option<u64>,
+
+    /// API URL
+    pub url: Option<String>,
 
     /// Created timestamp
     pub created_at: Option<String>,
@@ -49,6 +61,9 @@ pub struct PointOfInterest {
 
     /// Website URL
     pub website: Option<String>,
+
+    /// Tag names
+    pub tag_names: Option<Vec<String>>,
 }
 
 /// Parameters for listing POIs
@@ -384,9 +399,9 @@ mod tests {
         let poi: PointOfInterest = serde_json::from_str(json).unwrap();
         assert_eq!(poi.id, 999);
         assert_eq!(poi.name.as_deref(), Some("Coffee Shop"));
-        assert_eq!(poi.latitude, Some(37.7749));
-        assert_eq!(poi.longitude, Some(-122.4194));
-        assert_eq!(poi.poi_type.as_deref(), Some("cafe"));
+        assert_eq!(poi.lat, Some(37.7749));
+        assert_eq!(poi.lng, Some(-122.4194));
+        assert_eq!(poi.r#type.as_deref(), Some("cafe"));
     }
 
     #[test]

@@ -9,8 +9,17 @@ pub struct User {
     /// User ID
     pub id: u64,
 
-    /// User name
+    /// User name (full name or display name)
     pub name: Option<String>,
+
+    /// First name
+    pub first_name: Option<String>,
+
+    /// Last name
+    pub last_name: Option<String>,
+
+    /// Display name
+    pub display_name: Option<String>,
 
     /// User email
     pub email: Option<String>,
@@ -29,6 +38,9 @@ pub struct User {
 
     /// Account creation timestamp
     pub created_at: Option<String>,
+
+    /// Account updated timestamp
+    pub updated_at: Option<String>,
 }
 
 impl RideWithGpsClient {

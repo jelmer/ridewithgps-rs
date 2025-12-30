@@ -18,6 +18,18 @@ pub struct Collection {
     /// User ID of the collection owner
     pub user_id: Option<u64>,
 
+    /// Visibility
+    pub visibility: Option<crate::Visibility>,
+
+    /// API URL
+    pub url: Option<String>,
+
+    /// HTML/web URL
+    pub html_url: Option<String>,
+
+    /// Cover photo/image
+    pub cover: Option<String>,
+
     /// Created timestamp
     pub created_at: Option<String>,
 

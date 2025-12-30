@@ -31,6 +31,14 @@ pub struct TrackPoint {
 
     /// Elevation in meters
     pub e: Option<f64>,
+
+    /// Surface type
+    #[serde(rename = "S")]
+    pub surface: Option<i32>,
+
+    /// Highway tag
+    #[serde(rename = "R")]
+    pub highway: Option<i32>,
 }
 
 /// Course point (turn-by-turn cue) on a route
@@ -98,6 +106,12 @@ pub struct Route {
     /// User ID of the route owner
     pub user_id: Option<u64>,
 
+    /// API URL
+    pub url: Option<String>,
+
+    /// HTML/web URL
+    pub html_url: Option<String>,
+
     /// Created timestamp
     pub created_at: Option<String>,
 
@@ -124,6 +138,42 @@ pub struct Route {
 
     /// Difficulty rating
     pub difficulty: Option<i32>,
+
+    /// First point latitude
+    pub first_lat: Option<f64>,
+
+    /// First point longitude
+    pub first_lng: Option<f64>,
+
+    /// Last point latitude
+    pub last_lat: Option<f64>,
+
+    /// Last point longitude
+    pub last_lng: Option<f64>,
+
+    /// Southwest corner latitude (bounding box)
+    pub sw_lat: Option<f64>,
+
+    /// Southwest corner longitude (bounding box)
+    pub sw_lng: Option<f64>,
+
+    /// Northeast corner latitude (bounding box)
+    pub ne_lat: Option<f64>,
+
+    /// Northeast corner longitude (bounding box)
+    pub ne_lng: Option<f64>,
+
+    /// Percentage of unpaved surface
+    pub unpaved_pct: Option<f64>,
+
+    /// Surface type
+    pub surface: Option<String>,
+
+    /// Whether the route is archived
+    pub archived: Option<bool>,
+
+    /// Activity types
+    pub activity_types: Option<Vec<String>>,
 
     /// Track points (included when fetching a specific route)
     pub track_points: Option<Vec<TrackPoint>>,

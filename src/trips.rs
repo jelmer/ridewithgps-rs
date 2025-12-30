@@ -36,6 +36,18 @@ pub struct TripTrackPoint {
 
     /// Power in watts
     pub p: Option<f64>,
+
+    /// Power balance (L/R percentage)
+    pub pb: Option<f64>,
+
+    /// Lap marker
+    pub lap: Option<bool>,
+
+    /// Exclude from metrics
+    pub k: Option<bool>,
+
+    /// User modified point
+    pub m: Option<bool>,
 }
 
 /// Gear/equipment used for a trip
@@ -87,8 +99,17 @@ pub struct Trip {
     /// User ID of the trip owner
     pub user_id: Option<u64>,
 
+    /// API URL
+    pub url: Option<String>,
+
+    /// HTML/web URL
+    pub web_url: Option<String>,
+
     /// Departed at timestamp
     pub departed_at: Option<String>,
+
+    /// Time zone
+    pub time_zone: Option<String>,
 
     /// Created timestamp
     pub created_at: Option<String>,
@@ -111,11 +132,35 @@ pub struct Trip {
     /// Average cadence (RPM)
     pub avg_cad: Option<f64>,
 
+    /// Minimum cadence (RPM)
+    pub min_cad: Option<f64>,
+
+    /// Maximum cadence (RPM)
+    pub max_cad: Option<f64>,
+
     /// Average heart rate (BPM)
     pub avg_hr: Option<f64>,
 
+    /// Minimum heart rate (BPM)
+    pub min_hr: Option<f64>,
+
+    /// Maximum heart rate (BPM)
+    pub max_hr: Option<f64>,
+
     /// Average power (watts)
     pub avg_watts: Option<f64>,
+
+    /// Minimum power (watts)
+    pub min_watts: Option<f64>,
+
+    /// Maximum power (watts)
+    pub max_watts: Option<f64>,
+
+    /// Calories burned
+    pub calories: Option<f64>,
+
+    /// Recording device name
+    pub device: Option<String>,
 
     /// Locality/location
     pub locality: Option<String>,
@@ -125,6 +170,51 @@ pub struct Trip {
 
     /// Country code
     pub country_code: Option<String>,
+
+    /// Activity type
+    pub activity_type: Option<String>,
+
+    /// FIT file sport type
+    pub fit_sport: Option<i32>,
+
+    /// FIT file sub-sport type
+    pub fit_sub_sport: Option<i32>,
+
+    /// Whether the trip is stationary
+    pub stationary: Option<bool>,
+
+    /// Track type
+    pub track_type: Option<String>,
+
+    /// Terrain rating
+    pub terrain: Option<i32>,
+
+    /// Difficulty rating
+    pub difficulty: Option<i32>,
+
+    /// First point latitude
+    pub first_lat: Option<f64>,
+
+    /// First point longitude
+    pub first_lng: Option<f64>,
+
+    /// Last point latitude
+    pub last_lat: Option<f64>,
+
+    /// Last point longitude
+    pub last_lng: Option<f64>,
+
+    /// Southwest corner latitude (bounding box)
+    pub sw_lat: Option<f64>,
+
+    /// Southwest corner longitude (bounding box)
+    pub sw_lng: Option<f64>,
+
+    /// Northeast corner latitude (bounding box)
+    pub ne_lat: Option<f64>,
+
+    /// Northeast corner longitude (bounding box)
+    pub ne_lng: Option<f64>,
 
     /// Track points with telemetry (included when fetching a specific trip)
     pub track_points: Option<Vec<TripTrackPoint>>,

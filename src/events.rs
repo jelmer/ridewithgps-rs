@@ -34,13 +34,43 @@ pub struct Event {
     /// Event location
     pub location: Option<String>,
 
+    /// Latitude
+    pub lat: Option<f64>,
+
+    /// Longitude
+    pub lng: Option<f64>,
+
     /// Event visibility
     pub visibility: Option<Visibility>,
 
-    /// Event start date/time
+    /// API URL
+    pub url: Option<String>,
+
+    /// HTML/web URL
+    pub html_url: Option<String>,
+
+    /// Time zone
+    pub time_zone: Option<String>,
+
+    /// Start date
+    pub start_date: Option<String>,
+
+    /// Start time (e.g., "09:00")
+    pub start_time: Option<String>,
+
+    /// End date
+    pub end_date: Option<String>,
+
+    /// End time (e.g., "17:00")
+    pub end_time: Option<String>,
+
+    /// Whether it's an all-day event
+    pub all_day: Option<bool>,
+
+    /// Event start date/time (combined)
     pub starts_at: Option<String>,
 
-    /// Event end date/time
+    /// Event end date/time (combined)
     pub ends_at: Option<String>,
 
     /// Registration opens at
