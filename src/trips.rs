@@ -425,4 +425,94 @@ mod tests {
         assert!(json.get("min_distance").is_some());
         assert!(json.get("page").is_some());
     }
+
+    #[test]
+    fn test_trip_wrapper_deserialization() {
+        let json = r#"{
+            "trip": {
+                "id": 789,
+                "name": "Wrapped Trip",
+                "distance": 30000.0,
+                "avg_hr": 145.5
+            }
+        }"#;
+
+        #[derive(Deserialize)]
+        struct TripWrapper {
+            trip: Trip,
+        }
+
+        let wrapper: TripWrapper = serde_json::from_str(json).unwrap();
+        assert_eq!(wrapper.trip.id, 789);
+        assert_eq!(wrapper.trip.name.as_deref(), Some("Wrapped Trip"));
+        assert_eq!(wrapper.trip.avg_hr, Some(145.5));
+    }
+
+    #[test]
+    fn test_trip_track_point_deserialization() {
+        let json = r#"{
+            "x": -122.4,
+            "y": 37.7,
+            "t": 1609459200,
+            "s": 5.5,
+            "h": 150.0,
+            "c": 90.0,
+            "p": 200.0,
+            "lap": true
+        }"#;
+
+        let track_point: TripTrackPoint = serde_json::from_str(json).unwrap();
+        assert_eq!(track_point.x, Some(-122.4));
+        assert_eq!(track_point.y, Some(37.7));
+        assert_eq!(track_point.t, Some(1609459200));
+        assert_eq!(track_point.s, Some(5.5));
+        assert_eq!(track_point.h, Some(150.0));
+        assert_eq!(track_point.c, Some(90.0));
+        assert_eq!(track_point.p, Some(200.0));
+        assert_eq!(track_point.lap, Some(true));
+    }
+
+    #[test]
+    fn test_gear_deserialization() {
+        let json = r#"{
+            "id": 42,
+            "make": "Trek",
+            "model": "Domane SL5",
+            "description": "Road Bike"
+        }"#;
+
+        let gear: Gear = serde_json::from_str(json).unwrap();
+        assert_eq!(gear.id, 42);
+        assert_eq!(gear.make.as_deref(), Some("Trek"));
+        assert_eq!(gear.model.as_deref(), Some("Domane SL5"));
+        assert_eq!(gear.description.as_deref(), Some("Road Bike"));
+    }
+
+    #[test]
+    fn test_trip_with_telemetry() {
+        let json = r#"{
+            "id": 555,
+            "name": "Power Training",
+            "avg_cad": 85.5,
+            "max_cad": 120.0,
+            "avg_hr": 155.0,
+            "max_hr": 180.0,
+            "avg_watts": 220.0,
+            "max_watts": 450.0,
+            "calories": 850.0,
+            "fit_sport": 2,
+            "fit_sub_sport": 10
+        }"#;
+
+        let trip: Trip = serde_json::from_str(json).unwrap();
+        assert_eq!(trip.id, 555);
+        assert_eq!(trip.avg_cad, Some(85.5));
+        assert_eq!(trip.max_cad, Some(120.0));
+        assert_eq!(trip.avg_hr, Some(155.0));
+        assert_eq!(trip.max_hr, Some(180.0));
+        assert_eq!(trip.avg_watts, Some(220.0));
+        assert_eq!(trip.calories, Some(850.0));
+        assert_eq!(trip.fit_sport, Some(2));
+        assert_eq!(trip.fit_sub_sport, Some(10));
+    }
 }

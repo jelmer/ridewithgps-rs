@@ -412,4 +412,100 @@ mod tests {
         assert!(json.get("visibility").is_some());
         assert!(json.get("min_distance").is_some());
     }
+
+    #[test]
+    fn test_route_wrapper_deserialization() {
+        let json = r#"{
+            "route": {
+                "id": 456,
+                "name": "Wrapped Route",
+                "distance": 15000.0
+            }
+        }"#;
+
+        #[derive(Deserialize)]
+        struct RouteWrapper {
+            route: Route,
+        }
+
+        let wrapper: RouteWrapper = serde_json::from_str(json).unwrap();
+        assert_eq!(wrapper.route.id, 456);
+        assert_eq!(wrapper.route.name.as_deref(), Some("Wrapped Route"));
+        assert_eq!(wrapper.route.distance, Some(15000.0));
+    }
+
+    #[test]
+    fn test_track_point_deserialization() {
+        let json = r#"{
+            "x": -122.4194,
+            "y": 37.7749,
+            "d": 1234.5,
+            "e": 100.0,
+            "S": 2,
+            "R": 3
+        }"#;
+
+        let track_point: TrackPoint = serde_json::from_str(json).unwrap();
+        assert_eq!(track_point.x, Some(-122.4194));
+        assert_eq!(track_point.y, Some(37.7749));
+        assert_eq!(track_point.d, Some(1234.5));
+        assert_eq!(track_point.e, Some(100.0));
+        assert_eq!(track_point.surface, Some(2));
+        assert_eq!(track_point.highway, Some(3));
+    }
+
+    #[test]
+    fn test_course_point_deserialization() {
+        let json = r#"{
+            "x": -122.5,
+            "y": 37.8,
+            "d": 5000.0,
+            "n": "Water Stop",
+            "t": "water"
+        }"#;
+
+        let course_point: CoursePoint = serde_json::from_str(json).unwrap();
+        assert_eq!(course_point.x, Some(-122.5));
+        assert_eq!(course_point.y, Some(37.8));
+        assert_eq!(course_point.d, Some(5000.0));
+        assert_eq!(course_point.n.as_deref(), Some("Water Stop"));
+        assert_eq!(course_point.t.as_deref(), Some("water"));
+    }
+
+    #[test]
+    fn test_route_with_nested_structures() {
+        let json = r#"{
+            "id": 999,
+            "name": "Complex Route",
+            "track_points": [
+                {"x": -122.0, "y": 37.0, "d": 0.0},
+                {"x": -122.1, "y": 37.1, "d": 100.0}
+            ],
+            "course_points": [
+                {"id": 1, "n": "Start", "t": "generic"}
+            ]
+        }"#;
+
+        let route: Route = serde_json::from_str(json).unwrap();
+        assert_eq!(route.id, 999);
+        assert!(route.track_points.is_some());
+        assert_eq!(route.track_points.as_ref().unwrap().len(), 2);
+        assert!(route.course_points.is_some());
+        assert_eq!(route.course_points.as_ref().unwrap().len(), 1);
+    }
+
+    #[test]
+    fn test_photo_deserialization() {
+        let json = r#"{
+            "id": 111,
+            "url": "https://example.com/photo.jpg",
+            "thumbnail_url": "https://example.com/thumb.jpg",
+            "caption": "Great view"
+        }"#;
+
+        let photo: Photo = serde_json::from_str(json).unwrap();
+        assert_eq!(photo.id, 111);
+        assert_eq!(photo.url.as_deref(), Some("https://example.com/photo.jpg"));
+        assert_eq!(photo.caption.as_deref(), Some("Great view"));
+    }
 }

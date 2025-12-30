@@ -293,4 +293,68 @@ mod tests {
         assert_eq!(json.get("status").unwrap(), "active");
         assert!(json.get("permissions").is_some());
     }
+
+    #[test]
+    fn test_member_wrapper_deserialization() {
+        let json = r#"{
+            "member": {
+                "id": 888,
+                "user_id": 777,
+                "name": "Wrapped Member",
+                "role": "admin",
+                "status": "active"
+            }
+        }"#;
+
+        #[derive(Deserialize)]
+        struct MemberWrapper {
+            member: Member,
+        }
+
+        let wrapper: MemberWrapper = serde_json::from_str(json).unwrap();
+        assert_eq!(wrapper.member.id, 888);
+        assert_eq!(wrapper.member.user_id, Some(777));
+        assert_eq!(wrapper.member.name.as_deref(), Some("Wrapped Member"));
+        assert_eq!(wrapper.member.role.as_deref(), Some("admin"));
+    }
+
+    #[test]
+    fn test_member_permissions_deserialization() {
+        let json = r#"{
+            "manage_routes": true,
+            "manage_events": false,
+            "manage_members": true,
+            "view_analytics": true
+        }"#;
+
+        let perms: MemberPermissions = serde_json::from_str(json).unwrap();
+        assert_eq!(perms.manage_routes, Some(true));
+        assert_eq!(perms.manage_events, Some(false));
+        assert_eq!(perms.manage_members, Some(true));
+        assert_eq!(perms.view_analytics, Some(true));
+    }
+
+    #[test]
+    fn test_member_with_user_object() {
+        let json = r#"{
+            "id": 999,
+            "user_id": 555,
+            "name": "Full Member",
+            "admin": true,
+            "manages_routes": true,
+            "user": {
+                "id": 555,
+                "name": "User Name",
+                "email": "user@example.com"
+            }
+        }"#;
+
+        let member: Member = serde_json::from_str(json).unwrap();
+        assert_eq!(member.id, 999);
+        assert_eq!(member.admin, Some(true));
+        assert!(member.user.is_some());
+        let user = member.user.unwrap();
+        assert_eq!(user.id, 555);
+        assert_eq!(user.name.as_deref(), Some("User Name"));
+    }
 }

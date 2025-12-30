@@ -442,4 +442,72 @@ mod tests {
         assert_eq!(json.get("latitude").unwrap(), 40.7128);
         assert_eq!(json.get("poi_type").unwrap(), "bike_shop");
     }
+
+    #[test]
+    fn test_poi_wrapper_deserialization() {
+        let json = r#"{
+            "point_of_interest": {
+                "id": 777,
+                "name": "Wrapped POI",
+                "latitude": 40.0,
+                "longitude": -120.0,
+                "poi_type": "rest_stop"
+            }
+        }"#;
+
+        #[derive(Deserialize)]
+        struct PoiWrapper {
+            point_of_interest: PointOfInterest,
+        }
+
+        let wrapper: PoiWrapper = serde_json::from_str(json).unwrap();
+        assert_eq!(wrapper.point_of_interest.id, 777);
+        assert_eq!(
+            wrapper.point_of_interest.name.as_deref(),
+            Some("Wrapped POI")
+        );
+        assert_eq!(wrapper.point_of_interest.lat, Some(40.0));
+        assert_eq!(
+            wrapper.point_of_interest.r#type.as_deref(),
+            Some("rest_stop")
+        );
+    }
+
+    #[test]
+    fn test_poi_with_tags_and_type_info() {
+        let json = r#"{
+            "id": 444,
+            "name": "Tagged POI",
+            "poi_type": "cafe",
+            "type_id": 5,
+            "type_name": "Coffee Shop",
+            "tag_names": ["espresso", "wifi", "outdoor-seating"]
+        }"#;
+
+        let poi: PointOfInterest = serde_json::from_str(json).unwrap();
+        assert_eq!(poi.id, 444);
+        assert_eq!(poi.r#type.as_deref(), Some("cafe"));
+        assert_eq!(poi.type_id, Some(5));
+        assert_eq!(poi.type_name.as_deref(), Some("Coffee Shop"));
+        assert!(poi.tag_names.is_some());
+        let tags = poi.tag_names.unwrap();
+        assert_eq!(tags.len(), 3);
+        assert_eq!(tags[0], "espresso");
+    }
+
+    #[test]
+    fn test_poi_field_aliases() {
+        // Test that both latitude/lat and longitude/lng work
+        let json_with_full_names = r#"{
+            "id": 111,
+            "latitude": 37.5,
+            "longitude": -122.5,
+            "poi_type": "water"
+        }"#;
+
+        let poi1: PointOfInterest = serde_json::from_str(json_with_full_names).unwrap();
+        assert_eq!(poi1.lat, Some(37.5));
+        assert_eq!(poi1.lng, Some(-122.5));
+        assert_eq!(poi1.r#type.as_deref(), Some("water"));
+    }
 }

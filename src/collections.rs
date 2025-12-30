@@ -217,4 +217,83 @@ mod tests {
         assert!(json.get("name").is_some());
         assert!(json.get("page").is_some());
     }
+
+    #[test]
+    fn test_collection_wrapper_deserialization() {
+        let json = r#"{
+            "collection": {
+                "id": 888,
+                "name": "Wrapped Collection",
+                "visibility": "public"
+            }
+        }"#;
+
+        #[derive(Deserialize)]
+        struct CollectionWrapper {
+            collection: Collection,
+        }
+
+        let wrapper: CollectionWrapper = serde_json::from_str(json).unwrap();
+        assert_eq!(wrapper.collection.id, 888);
+        assert_eq!(
+            wrapper.collection.name.as_deref(),
+            Some("Wrapped Collection")
+        );
+        assert_eq!(
+            wrapper.collection.visibility,
+            Some(crate::Visibility::Public)
+        );
+    }
+
+    #[test]
+    fn test_collection_with_nested_routes() {
+        let json = r#"{
+            "id": 777,
+            "name": "Collection with Routes",
+            "routes": [
+                {
+                    "id": 1,
+                    "name": "Route 1",
+                    "distance": 10000.0
+                },
+                {
+                    "id": 2,
+                    "name": "Route 2",
+                    "distance": 20000.0
+                }
+            ]
+        }"#;
+
+        let collection: Collection = serde_json::from_str(json).unwrap();
+        assert_eq!(collection.id, 777);
+        assert!(collection.routes.is_some());
+        let routes = collection.routes.unwrap();
+        assert_eq!(routes.len(), 2);
+        assert_eq!(routes[0].id, 1);
+        assert_eq!(routes[0].name.as_deref(), Some("Route 1"));
+        assert_eq!(routes[1].id, 2);
+    }
+
+    #[test]
+    fn test_collection_with_nested_trips() {
+        let json = r#"{
+            "id": 666,
+            "name": "Collection with Trips",
+            "trips": [
+                {
+                    "id": 10,
+                    "name": "Trip 1",
+                    "distance": 15000.0
+                }
+            ]
+        }"#;
+
+        let collection: Collection = serde_json::from_str(json).unwrap();
+        assert_eq!(collection.id, 666);
+        assert!(collection.trips.is_some());
+        let trips = collection.trips.unwrap();
+        assert_eq!(trips.len(), 1);
+        assert_eq!(trips[0].id, 10);
+        assert_eq!(trips[0].name.as_deref(), Some("Trip 1"));
+    }
 }

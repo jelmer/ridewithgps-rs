@@ -405,4 +405,62 @@ mod tests {
         assert_eq!(json.get("registration_required").unwrap(), true);
         assert_eq!(json.get("max_attendees").unwrap(), 100);
     }
+
+    #[test]
+    fn test_event_wrapper_deserialization() {
+        let json = r#"{
+            "event": {
+                "id": 999,
+                "name": "Wrapped Event",
+                "location": "Portland, OR",
+                "visibility": "public"
+            }
+        }"#;
+
+        #[derive(Deserialize)]
+        struct EventWrapper {
+            event: Event,
+        }
+
+        let wrapper: EventWrapper = serde_json::from_str(json).unwrap();
+        assert_eq!(wrapper.event.id, 999);
+        assert_eq!(wrapper.event.name.as_deref(), Some("Wrapped Event"));
+        assert_eq!(wrapper.event.location.as_deref(), Some("Portland, OR"));
+    }
+
+    #[test]
+    fn test_event_with_dates_and_times() {
+        let json = r#"{
+            "id": 555,
+            "name": "Time Test Event",
+            "start_date": "2025-06-01",
+            "start_time": "09:00",
+            "end_date": "2025-06-01",
+            "end_time": "17:00",
+            "all_day": false,
+            "time_zone": "America/Los_Angeles",
+            "starts_at": "2025-06-01T09:00:00-07:00",
+            "ends_at": "2025-06-01T17:00:00-07:00"
+        }"#;
+
+        let event: Event = serde_json::from_str(json).unwrap();
+        assert_eq!(event.id, 555);
+        assert_eq!(event.start_date.as_deref(), Some("2025-06-01"));
+        assert_eq!(event.start_time.as_deref(), Some("09:00"));
+        assert_eq!(event.all_day, Some(false));
+        assert_eq!(event.time_zone.as_deref(), Some("America/Los_Angeles"));
+    }
+
+    #[test]
+    fn test_organizer_deserialization() {
+        let json = r#"{
+            "id": 42,
+            "name": "Bike Club",
+            "created_at": "2020-01-01T00:00:00Z"
+        }"#;
+
+        let organizer: Organizer = serde_json::from_str(json).unwrap();
+        assert_eq!(organizer.id, Some(42));
+        assert_eq!(organizer.name.as_deref(), Some("Bike Club"));
+    }
 }

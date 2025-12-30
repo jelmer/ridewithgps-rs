@@ -255,8 +255,6 @@ Currently implemented endpoints:
 - `GET /api/v1/members/{id}.json` - Get member
 - `PUT /api/v1/members/{id}.json` - Update member permissions/status
 
-**All RideWithGPS API v1 endpoints are now implemented!**
-
 ## License
 
 Licensed under the Apache License, Version 2.0.
