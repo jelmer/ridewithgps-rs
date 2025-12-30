@@ -1,0 +1,24 @@
+[package]
+name = "ridewithgps-client"
+version = "0.1.0"
+edition = "2021"
+description = "API client for the RideWithGPS routing and trip planning service"
+authors = ["Jelmer Vernooĳ <jelmer@jelmer.uk>"]
+license = "Apache-2.0"
+repository = "https://github.com/jelmer/ridewithgps-rs"
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"], default-features = false }
+log = "0.4"
+reqwest = { version = "0.12", features = ["blocking", "json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_urlencoded = "0.7"
+url = "2.5"
+
+[dev-dependencies]
+serde_json = "1.0"
+
+[features]
+default = ["blocking"]
+blocking = []
