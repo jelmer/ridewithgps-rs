@@ -328,7 +328,13 @@ impl RideWithGpsClient {
     /// println!("Trip: {:?}", trip);
     /// ```
     pub fn get_trip(&self, id: u64) -> Result<Trip> {
-        self.get(&format!("/api/v1/trips/{}.json", id))
+        #[derive(Deserialize)]
+        struct TripWrapper {
+            trip: Trip,
+        }
+
+        let wrapper: TripWrapper = self.get(&format!("/api/v1/trips/{}.json", id))?;
+        Ok(wrapper.trip)
     }
 
     /// Get the polyline for a specific trip

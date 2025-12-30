@@ -190,7 +190,13 @@ impl RideWithGpsClient {
     /// println!("Member: {:?}", member);
     /// ```
     pub fn get_member(&self, id: u64) -> Result<Member> {
-        self.get(&format!("/api/v1/members/{}.json", id))
+        #[derive(Deserialize)]
+        struct MemberWrapper {
+            member: Member,
+        }
+
+        let wrapper: MemberWrapper = self.get(&format!("/api/v1/members/{}.json", id))?;
+        Ok(wrapper.member)
     }
 
     /// Update a member's permissions or status
@@ -228,7 +234,13 @@ impl RideWithGpsClient {
     /// println!("Updated member: {:?}", member);
     /// ```
     pub fn update_member(&self, id: u64, member: &UpdateMemberRequest) -> Result<Member> {
-        self.put(&format!("/api/v1/members/{}.json", id), member)
+        #[derive(Deserialize)]
+        struct MemberWrapper {
+            member: Member,
+        }
+
+        let wrapper: MemberWrapper = self.put(&format!("/api/v1/members/{}.json", id), member)?;
+        Ok(wrapper.member)
     }
 }
 

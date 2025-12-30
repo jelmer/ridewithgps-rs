@@ -209,7 +209,13 @@ impl RideWithGpsClient {
         &self,
         poi: &PointOfInterestRequest,
     ) -> Result<PointOfInterest> {
-        self.post("/api/v1/points_of_interest.json", poi)
+        #[derive(Deserialize)]
+        struct PoiWrapper {
+            point_of_interest: PointOfInterest,
+        }
+
+        let wrapper: PoiWrapper = self.post("/api/v1/points_of_interest.json", poi)?;
+        Ok(wrapper.point_of_interest)
     }
 
     /// Get a specific point of interest by ID
@@ -235,7 +241,13 @@ impl RideWithGpsClient {
     /// println!("POI: {:?}", poi);
     /// ```
     pub fn get_point_of_interest(&self, id: u64) -> Result<PointOfInterest> {
-        self.get(&format!("/api/v1/points_of_interest/{}.json", id))
+        #[derive(Deserialize)]
+        struct PoiWrapper {
+            point_of_interest: PointOfInterest,
+        }
+
+        let wrapper: PoiWrapper = self.get(&format!("/api/v1/points_of_interest/{}.json", id))?;
+        Ok(wrapper.point_of_interest)
     }
 
     /// Update a point of interest
@@ -278,7 +290,14 @@ impl RideWithGpsClient {
         id: u64,
         poi: &PointOfInterestRequest,
     ) -> Result<PointOfInterest> {
-        self.put(&format!("/api/v1/points_of_interest/{}.json", id), poi)
+        #[derive(Deserialize)]
+        struct PoiWrapper {
+            point_of_interest: PointOfInterest,
+        }
+
+        let wrapper: PoiWrapper =
+            self.put(&format!("/api/v1/points_of_interest/{}.json", id), poi)?;
+        Ok(wrapper.point_of_interest)
     }
 
     /// Delete a point of interest

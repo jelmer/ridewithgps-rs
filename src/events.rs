@@ -254,7 +254,13 @@ impl RideWithGpsClient {
     /// println!("Created event: {}", event.id);
     /// ```
     pub fn create_event(&self, event: &EventRequest) -> Result<Event> {
-        self.post("/api/v1/events.json", event)
+        #[derive(Deserialize)]
+        struct EventWrapper {
+            event: Event,
+        }
+
+        let wrapper: EventWrapper = self.post("/api/v1/events.json", event)?;
+        Ok(wrapper.event)
     }
 
     /// Get a specific event by ID
@@ -278,7 +284,13 @@ impl RideWithGpsClient {
     /// println!("Event: {:?}", event);
     /// ```
     pub fn get_event(&self, id: u64) -> Result<Event> {
-        self.get(&format!("/api/v1/events/{}.json", id))
+        #[derive(Deserialize)]
+        struct EventWrapper {
+            event: Event,
+        }
+
+        let wrapper: EventWrapper = self.get(&format!("/api/v1/events/{}.json", id))?;
+        Ok(wrapper.event)
     }
 
     /// Update an event
@@ -316,7 +328,13 @@ impl RideWithGpsClient {
     /// println!("Updated event: {:?}", event);
     /// ```
     pub fn update_event(&self, id: u64, event: &EventRequest) -> Result<Event> {
-        self.put(&format!("/api/v1/events/{}.json", id), event)
+        #[derive(Deserialize)]
+        struct EventWrapper {
+            event: Event,
+        }
+
+        let wrapper: EventWrapper = self.put(&format!("/api/v1/events/{}.json", id), event)?;
+        Ok(wrapper.event)
     }
 
     /// Delete an event

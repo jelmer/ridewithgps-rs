@@ -134,10 +134,10 @@ pub struct Route {
     pub has_course_points: Option<bool>,
 
     /// Terrain rating
-    pub terrain: Option<i32>,
+    pub terrain: Option<String>,
 
     /// Difficulty rating
-    pub difficulty: Option<i32>,
+    pub difficulty: Option<String>,
 
     /// First point latitude
     pub first_lat: Option<f64>,
@@ -306,7 +306,13 @@ impl RideWithGpsClient {
     /// println!("Route: {:?}", route);
     /// ```
     pub fn get_route(&self, id: u64) -> Result<Route> {
-        self.get(&format!("/api/v1/routes/{}.json", id))
+        #[derive(Deserialize)]
+        struct RouteWrapper {
+            route: Route,
+        }
+
+        let wrapper: RouteWrapper = self.get(&format!("/api/v1/routes/{}.json", id))?;
+        Ok(wrapper.route)
     }
 
     /// Get the polyline for a specific route

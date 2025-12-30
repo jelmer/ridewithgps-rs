@@ -145,7 +145,13 @@ impl RideWithGpsClient {
     /// }
     /// ```
     pub fn get_collection(&self, id: u64) -> Result<Collection> {
-        self.get(&format!("/api/v1/collections/{}.json", id))
+        #[derive(Deserialize)]
+        struct CollectionWrapper {
+            collection: Collection,
+        }
+
+        let wrapper: CollectionWrapper = self.get(&format!("/api/v1/collections/{}.json", id))?;
+        Ok(wrapper.collection)
     }
 
     /// Get the pinned collection
@@ -165,7 +171,13 @@ impl RideWithGpsClient {
     /// println!("Pinned collection: {:?}", collection);
     /// ```
     pub fn get_pinned_collection(&self) -> Result<Collection> {
-        self.get("/api/v1/collections/pinned.json")
+        #[derive(Deserialize)]
+        struct CollectionWrapper {
+            collection: Collection,
+        }
+
+        let wrapper: CollectionWrapper = self.get("/api/v1/collections/pinned.json")?;
+        Ok(wrapper.collection)
     }
 }
 

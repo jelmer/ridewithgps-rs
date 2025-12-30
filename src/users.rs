@@ -63,7 +63,13 @@ impl RideWithGpsClient {
     /// println!("User: {:?}", user);
     /// ```
     pub fn get_current_user(&self) -> Result<User> {
-        self.get("/api/v1/users/current")
+        #[derive(Deserialize)]
+        struct UserWrapper {
+            user: User,
+        }
+
+        let wrapper: UserWrapper = self.get("/api/v1/users/current.json")?;
+        Ok(wrapper.user)
     }
 }
 

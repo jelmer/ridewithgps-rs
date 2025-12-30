@@ -131,6 +131,65 @@ let polyline = client.get_trip_polyline(67890)?;
 client.delete_trip(67890)?;
 ```
 
+### Working with Collections
+
+```rust
+use ridewithgps_client::RideWithGpsClient;
+
+let client = RideWithGpsClient::new(
+    "https://ridewithgps.com",
+    "your-api-key",
+    None
+);
+
+// List all collections
+let collections = client.list_collections(None)?;
+for collection in collections.results {
+    println!("Collection: {} - {:?}",
+        collection.id,
+        collection.name.unwrap_or_default()
+    );
+}
+
+// Get a specific collection with all its routes and trips
+let collection = client.get_collection(8094883)?;
+println!("Collection: {:?}", collection.name);
+println!("Description: {:?}", collection.description);
+
+// Access routes within the collection
+if let Some(routes) = &collection.routes {
+    println!("\nRoutes in collection:");
+    for route in routes {
+        println!("  Route {} - {:?} ({:.1}km)",
+            route.id,
+            route.name,
+            route.distance.unwrap_or(0.0) / 1000.0
+        );
+    }
+}
+
+// Access trips within the collection
+if let Some(trips) = &collection.trips {
+    println!("\nTrips in collection:");
+    for trip in trips {
+        println!("  Trip {} - {:?} ({:.1}km)",
+            trip.id,
+            trip.name,
+            trip.distance.unwrap_or(0.0) / 1000.0
+        );
+    }
+}
+
+// Get the pinned collection (requires auth)
+let client_auth = RideWithGpsClient::new(
+    "https://ridewithgps.com",
+    "your-api-key",
+    Some("your-auth-token")
+);
+let pinned = client_auth.get_pinned_collection()?;
+println!("Pinned collection: {:?}", pinned.name);
+```
+
 ### Working with Users
 
 ```rust
