@@ -1,6 +1,6 @@
 //! Route-related types and methods
 
-use crate::{PaginatedResponse, Result, RideWithGpsClient};
+use crate::{PaginatedResponse, PointOfInterest, Result, RideWithGpsClient};
 use serde::{Deserialize, Serialize};
 
 /// Visibility setting for a route
@@ -15,6 +15,60 @@ pub enum Visibility {
 
     /// Unlisted route
     Unlisted,
+}
+
+/// Track point on a route
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TrackPoint {
+    /// Longitude
+    pub x: Option<f64>,
+
+    /// Latitude
+    pub y: Option<f64>,
+
+    /// Distance in meters
+    pub d: Option<f64>,
+
+    /// Elevation in meters
+    pub e: Option<f64>,
+}
+
+/// Course point (turn-by-turn cue) on a route
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct CoursePoint {
+    /// Longitude
+    pub x: Option<f64>,
+
+    /// Latitude
+    pub y: Option<f64>,
+
+    /// Distance in meters
+    pub d: Option<f64>,
+
+    /// Cue type
+    pub t: Option<String>,
+
+    /// Cue text/description
+    pub n: Option<String>,
+}
+
+/// Photo attached to a route or trip
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Photo {
+    /// Photo ID
+    pub id: u64,
+
+    /// Photo URL
+    pub url: Option<String>,
+
+    /// Whether the photo is highlighted
+    pub highlighted: Option<bool>,
+
+    /// Photo caption
+    pub caption: Option<String>,
+
+    /// Created timestamp
+    pub created_at: Option<String>,
 }
 
 /// A route
@@ -70,6 +124,18 @@ pub struct Route {
 
     /// Difficulty rating
     pub difficulty: Option<i32>,
+
+    /// Track points (included when fetching a specific route)
+    pub track_points: Option<Vec<TrackPoint>>,
+
+    /// Course points/cues (included when fetching a specific route)
+    pub course_points: Option<Vec<CoursePoint>>,
+
+    /// Points of interest along the route (included when fetching a specific route)
+    pub points_of_interest: Option<Vec<PointOfInterest>>,
+
+    /// Photos (included when fetching a specific route)
+    pub photos: Option<Vec<Photo>>,
 }
 
 /// Polyline data for a route

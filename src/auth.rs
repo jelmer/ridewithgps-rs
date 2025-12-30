@@ -1,6 +1,6 @@
 //! Authentication-related types and methods
 
-use crate::{Result, RideWithGpsClient};
+use crate::{Result, RideWithGpsClient, User};
 use serde::{Deserialize, Serialize};
 
 /// Request to create an authentication token
@@ -21,6 +21,9 @@ pub struct AuthToken {
 
     /// User ID
     pub user_id: Option<u64>,
+
+    /// User object (included in the response)
+    pub user: Option<User>,
 }
 
 impl RideWithGpsClient {

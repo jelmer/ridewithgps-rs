@@ -1,7 +1,64 @@
 //! Trip-related types and methods
 
-use crate::{PaginatedResponse, Polyline, Result, RideWithGpsClient, Visibility};
+use crate::{PaginatedResponse, Photo, Polyline, Result, RideWithGpsClient, Visibility};
 use serde::{Deserialize, Serialize};
+
+/// Track point on a trip with telemetry data
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct TripTrackPoint {
+    /// Longitude
+    pub x: Option<f64>,
+
+    /// Latitude
+    pub y: Option<f64>,
+
+    /// Distance in meters
+    pub d: Option<f64>,
+
+    /// Elevation in meters
+    pub e: Option<f64>,
+
+    /// Unix timestamp
+    pub t: Option<i64>,
+
+    /// Speed in km/h
+    pub s: Option<f64>,
+
+    /// Temperature in Celsius
+    #[serde(rename = "T")]
+    pub temp: Option<f64>,
+
+    /// Heart rate in BPM
+    pub h: Option<f64>,
+
+    /// Cadence in RPM
+    pub c: Option<f64>,
+
+    /// Power in watts
+    pub p: Option<f64>,
+}
+
+/// Gear/equipment used for a trip
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Gear {
+    /// Gear ID
+    pub id: u64,
+
+    /// Make/brand
+    pub make: Option<String>,
+
+    /// Model
+    pub model: Option<String>,
+
+    /// Description
+    pub description: Option<String>,
+
+    /// Whether to exclude from totals
+    pub exclude_from_totals: Option<bool>,
+
+    /// Created timestamp
+    pub created_at: Option<String>,
+}
 
 /// A trip (recorded ride)
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -68,6 +125,15 @@ pub struct Trip {
 
     /// Country code
     pub country_code: Option<String>,
+
+    /// Track points with telemetry (included when fetching a specific trip)
+    pub track_points: Option<Vec<TripTrackPoint>>,
+
+    /// Gear/equipment used (included when fetching a specific trip)
+    pub gear: Option<Gear>,
+
+    /// Photos (included when fetching a specific trip)
+    pub photos: Option<Vec<Photo>>,
 }
 
 /// Parameters for listing trips

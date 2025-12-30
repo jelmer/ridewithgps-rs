@@ -1,7 +1,23 @@
 //! Event-related types and methods
 
-use crate::{PaginatedResponse, Result, RideWithGpsClient, Visibility};
+use crate::{PaginatedResponse, Photo, Result, RideWithGpsClient, Visibility};
 use serde::{Deserialize, Serialize};
+
+/// Event organizer information
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Organizer {
+    /// Organizer ID
+    pub id: Option<u64>,
+
+    /// Organizer name
+    pub name: Option<String>,
+
+    /// Created timestamp
+    pub created_at: Option<String>,
+
+    /// Updated timestamp
+    pub updated_at: Option<String>,
+}
 
 /// An event
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -59,6 +75,12 @@ pub struct Event {
 
     /// Current number of attendees
     pub attendee_count: Option<u32>,
+
+    /// Event organizers (included when fetching a specific event)
+    pub organizers: Option<Vec<Organizer>>,
+
+    /// Photos (included when fetching a specific event)
+    pub photos: Option<Vec<Photo>>,
 }
 
 /// Parameters for listing events
